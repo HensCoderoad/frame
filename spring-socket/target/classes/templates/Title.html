@@ -1,0 +1,44 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+当前页面为Socket客户端
+<script type="text/javascript">
+
+    var socket;
+    if (typeof (WebSocket) == "undefined") {
+        console.log("抱歉：您的浏览器不支持WebSocket");
+    } else {
+        console.log("恭喜：您的浏览器支持WebSocket");
+        //默认端口为80和443
+        socket = new WebSocket("ws://localhost:8080/webSocket?username=zhangSan");
+        //连接打开事件
+        socket.onopen = function() {
+            console.log("Socket 已打开");
+            socket.send("消息发送测试(From Client)");
+        };
+        //收到消息事件
+        socket.onmessage = function(msg) {
+            alert(msg.data);
+        };
+        //连接关闭事件
+        socket.onclose = function() {
+            console.log("Socket已关闭");
+        };
+        //发生了错误事件
+        socket.onerror = function() {
+            alert("Socket发生了错误");
+        }
+
+        //窗口关闭时，关闭连接
+        window.unload=function() {
+            socket.close();
+        };
+
+    }
+</script>
+</body>
+</html>
